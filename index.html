@@ -8,7 +8,7 @@
 <style>
 :root{
   --navy:#0a1730; --navy2:#0d1f3d; --card:#132442; --line:#2a3f66;
-  --gold:#d4af37; --blue:#4da3ff; --txt:#f2f5fa; --mut:#9fb0cc;
+  --gold:#d4af37; --blue:#4da3ff; --txt:#f2f5fa; --mut:#9fb0cc; --red:#e06c75;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
 body{margin:0;background:var(--navy);color:var(--txt);
@@ -26,6 +26,9 @@ header p{margin:2px 0 0;font-size:12.5px;color:var(--mut);}
 .idbtn.on-diego{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue) inset;}
 .idbtn.on-jd{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;}
 .idbtn .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px;}
+.idstatic{font-size:14.5px;font-weight:600;}
+.voterbar{background:#171208;border-bottom:1px solid var(--gold);padding:9px 14px;
+  font-size:13px;color:var(--gold);position:sticky;top:0;z-index:20;}
 #daybar{position:sticky;top:0;z-index:19;background:var(--navy);border-bottom:1px solid var(--line);}
 #daychips{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;scrollbar-width:none;}
 #daychips::-webkit-scrollbar{display:none;}
@@ -42,10 +45,13 @@ main{max-width:660px;margin:0 auto;padding:6px 12px 120px;}
 .dayhead{margin:14px 2px 4px;}
 .dayhead h2{margin:0;font-size:21px;}
 .dayhead p{margin:2px 0 0;color:var(--mut);font-size:13.5px;}
+.dayhead .adminrow{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;}
+.mini{border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:9px;
+  padding:7px 11px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.mini.danger{border-color:var(--red);color:var(--red);}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
   padding:13px 13px 11px;margin:12px 0;}
 .card h3{margin:0 0 2px;font-size:15.5px;}
-.card h3 .gold{color:var(--gold);}
 .card .sub{font-size:12.5px;color:var(--mut);margin:0 0 6px;}
 .opt{position:relative;display:block;width:100%;text-align:left;background:#0f2038;
   border:1px solid var(--line);color:var(--txt);border-radius:11px;
@@ -64,17 +70,17 @@ main{max-width:660px;margin:0 auto;padding:6px 12px 120px;}
 .locked{border:1px dashed var(--gold);border-radius:11px;padding:10px 12px;margin:8px 0;background:#171208;}
 .locked .nm{font-weight:700;color:var(--gold);}
 .locked .bl{font-size:12.5px;color:var(--mut);}
-.locked a{color:var(--blue);font-size:13px;}
 .notice{background:#101f3a;border:1px solid var(--line);border-radius:12px;
   padding:11px 13px;font-size:13.5px;color:var(--mut);margin:12px 0;}
 .notice b{color:var(--txt);}
-select, .txtin{width:100%;background:#0f2038;color:var(--txt);border:1px solid var(--line);
+select{width:100%;background:#0f2038;color:var(--txt);border:1px solid var(--line);
   border-radius:10px;padding:10px;font-size:14.5px;margin-top:8px;}
 .btn{display:block;width:100%;border:none;border-radius:12px;padding:13px;
   font-size:15.5px;font-weight:700;cursor:pointer;margin:10px 0;}
 .btn-gold{background:var(--gold);color:#1a1206;}
 .btn-blue{background:var(--blue);color:#06121f;}
 .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt);}
+.btn-danger{background:transparent;border:1px solid var(--red);color:var(--red);}
 table.res{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
 table.res th{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;
   text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);}
@@ -94,7 +100,8 @@ table.res tr.win td{background:#1a1408;}
   align-items:flex-end;justify-content:center;}
 #modal.open{display:flex;}
 .sheet{background:var(--navy2);border:1px solid var(--line);border-bottom:none;
-  border-radius:18px 18px 0 0;max-width:660px;width:100%;padding:18px 16px 26px;}
+  border-radius:18px 18px 0 0;max-width:660px;width:100%;padding:18px 16px 26px;
+  max-height:86vh;overflow:auto;}
 .sheet h3{margin:0 0 8px;}
 .sheet p{font-size:13.5px;color:var(--mut);}
 .linkbox{background:#0a1428;border:1px solid var(--line);border-radius:10px;
@@ -104,31 +111,23 @@ table.res tr.win td{background:#1a1408;}
 .howto b{color:var(--gold);}
 .howto ol{margin:8px 0 4px;padding-left:20px;}
 .howto li{margin:4px 0;}
-.howto .x{float:right;background:none;border:none;color:var(--mut);font-size:16px;cursor:pointer;}
 .extbtn{display:inline-block;background:#1b3a6b;color:#fff;border-radius:9px;
   padding:8px 12px;font-size:13px;text-decoration:none;margin:6px 6px 0 0;}
 a{color:var(--blue);}
 </style>
 </head>
 <body>
-<header>
-  <h1>Boston Trip Vote <span class="amp">·</span> <span style="font-weight:400;font-size:14px;">Oct 25 – Nov 9</span></h1>
-  <p>Diego &amp; Juan Diego · rank your top 3 in each category · most points wins</p>
-  <div class="idrow">
-    <span class="lbl">Voting as:</span>
-    <button class="idbtn" id="btnDiego"><span class="dot" style="background:#4da3ff"></span>Diego</button>
-    <button class="idbtn" id="btnJD"><span class="dot" style="background:#d4af37"></span>Juan Diego</button>
-  </div>
-</header>
-<div id="daybar"><div id="daychips"></div></div>
+<div id="topbar"></div>
+<div id="daybar" style="display:none"><div id="daychips"></div></div>
 <main id="main"></main>
-<div id="sharebar"><div class="row">
-  <button class="btn btn-ghost" id="btnHow" style="flex:0 0 44px;">?</button>
-  <button class="btn btn-gold" id="btnShare">Share our votes</button>
-</div></div>
+<div id="sharebar"><div class="row" id="shareRow"></div></div>
 <div id="modal"><div class="sheet" id="sheet"></div></div>
 <script>
 "use strict";
+/* ================= APP MODE =================
+   Admin (default): full app, all days, both voters, results, lock.
+   Voter: single day, Juan Diego only, no results, no Diego votes visible.
+   Mode travels in the URL hash: #s=<state>&mode=voter&day=<dayId> */
 /* ================= DATA ================= */
 const DAYS=[
  {id:"d25",d:"Sun Oct 25",label:"Arrival day"},
@@ -149,324 +148,466 @@ const DAYS=[
  {id:"d09",d:"Mon Nov 9",label:"Departure"}
 ];
 const ORDER=DAYS.map(x=>x.id);
+const DESSERT_DAYS=["d30","d31","d01","d06","d07","d08"]; // Fri/Sat/Sun
+const CLUB_NIGHTS=["d29","d30","d31","d05","d06","d07"]; // Thu/Fri/Sat (latin card)
 const PLACES=[
- {id:"freedom",n:"Freedom Trail",b:"2.5-mile walk through 16 historic sites",u:"https://www.thefreedomtrail.org/"},
- {id:"common",n:"Boston Common & Public Garden",b:"Swan boats, fall colors, people-watching",u:""},
- {id:"beacon",n:"Beacon Hill & Acorn Street",b:"Cobblestones, gas lamps, Boston's prettiest street",u:""},
- {id:"northend",n:"North End",b:"Little Italy: cannoli, espresso, Hanover Street",u:""},
- {id:"harvard",n:"Harvard Yard & Square",b:"Diego's backyard: historic yard, bookshops",u:"https://www.harvard.edu/"},
- {id:"mit",n:"MIT & Kendall Square",b:"Stata Center, tech-campus vibes",u:"https://www.mit.edu/"},
- {id:"newbury",n:"Newbury Street & Back Bay",b:"Shopping, brownstones, Boston Public Library",u:"https://www.bpl.org/"},
- {id:"quincy",n:"Quincy Market & Faneuil Hall",b:"Food stalls and street performers",u:"https://www.faneuilhallmarketplace.com/"},
- {id:"waterfront",n:"Harborwalk & Waterfront",b:"Ferries, skyline views, sea air",u:""},
- {id:"esplanade",n:"Charles River Esplanade",b:"Sunset walks with skyline views",u:"https://esplanade.org/"},
- {id:"southend",n:"South End",b:"Galleries, brunch spots, brownstones",u:""},
- {id:"cambridge",n:"Central & Inman Squares",b:"Dive bars and local Cambridge flavor",u:""},
- {id:"mfa",n:"Museum of Fine Arts",b:"World-class art, about $30",u:"https://www.mfa.org/"},
- {id:"gardner",n:"Gardner Museum",b:"Venetian courtyard palace, about $25 (free Thu evenings)",u:"https://www.gardnermuseum.org/"},
- {id:"aquarium",n:"New England Aquarium",b:"Penguins and a giant ocean tank",u:"https://www.neaq.org/"},
- {id:"teaparty",n:"Tea Party Ships & Museum",b:"Throw tea in the harbor, about $35",u:"https://www.bostonteapartyship.com/"},
- {id:"fenway",n:"Fenway Park Tour",b:"Green Monster, about $25",u:"https://www.mlb.com/red-sox/ballpark/tours"},
- {id:"salem",n:"Salem day trip",b:"Witch-trial history and waterfront",u:"https://www.salem.org/"}
+ {id:"freedom",n:"Freedom Trail",b:"2.5-mile walk through 16 historic sites"},
+ {id:"common",n:"Boston Common & Public Garden",b:"Swan boats, fall colors, people-watching"},
+ {id:"beacon",n:"Beacon Hill & Acorn Street",b:"Cobblestones, gas lamps, Boston's prettiest street"},
+ {id:"northend",n:"North End",b:"Little Italy: cannoli, espresso, Hanover Street"},
+ {id:"harvard",n:"Harvard Yard & Square",b:"Diego's backyard: historic yard, bookshops"},
+ {id:"mit",n:"MIT & Kendall Square",b:"Stata Center, tech-campus vibes"},
+ {id:"newbury",n:"Newbury Street & Back Bay",b:"Shopping, brownstones, Boston Public Library"},
+ {id:"quincy",n:"Quincy Market & Faneuil Hall",b:"Food stalls and street performers"},
+ {id:"waterfront",n:"Harborwalk & Waterfront",b:"Ferries, skyline views, sea air"},
+ {id:"esplanade",n:"Charles River Esplanade",b:"Sunset walks with skyline views"},
+ {id:"southend",n:"South End",b:"Galleries, brunch spots, brownstones"},
+ {id:"cambridge",n:"Central & Inman Squares",b:"Dive bars and local Cambridge flavor"},
+ {id:"mfa",n:"Museum of Fine Arts",b:"World-class art, about $30"},
+ {id:"gardner",n:"Gardner Museum",b:"Venetian courtyard palace, about $25 (free Thu evenings)"},
+ {id:"aquarium",n:"New England Aquarium",b:"Penguins and a giant ocean tank"},
+ {id:"teaparty",n:"Tea Party Ships & Museum",b:"Throw tea in the harbor, about $35"},
+ {id:"fenway",n:"Fenway Park Tour",b:"Green Monster, about $25"},
+ {id:"salem",n:"Salem day trip",b:"Witch-trial history and waterfront"}
 ];
 const FOODS=[
  {id:"diego-cooks",n:"Diego cooks for Juan Diego",b:"Show off your skills, chef"},
  {id:"jd-cooks",n:"Juan Diego cooks for Diego",b:"Your turn in the kitchen"},
+ {id:"cook-together",n:"Cook together",b:"Team effort, twice the mess"},
+ {id:"takeout",n:"Order takeout",b:"Couch night, zero dishes"},
+ {id:"foodhall",n:"Food hall crawl",b:"Time Out Market or High Street Place"},
  {id:"eat-out",n:"We go out to eat",b:"Pick a cuisine below if this wins"}
 ];
 const CUISINES=["Seafood boil","Italian","Mexican","Chinese","Japanese / Sushi","Indian","Thai","Pizza","American BBQ","Brunch spot","Wings & beer"];
-const NIGHTPOOL={
- viewboston:{n:"View Boston observation deck",b:"360° views from the Prudential",u:"https://viewboston.com/"},
- improv:{n:"Improv Asylum (North End)",b:"Live improv comedy",u:"https://improvasylum.com/"},
- laugh:{n:"Laugh Boston (Seaport)",b:"Stand-up comedy club",u:"https://laughboston.com/"},
- coolidge:{n:"Coolidge Corner Theatre",b:"Classic indie cinema in Brookline",u:"https://coolidge.org/"},
- wallys:{n:"Wally's Cafe",b:"Legendary tiny live-jazz club",u:"https://wallyscafe.com/"},
- samadams:{n:"Sam Adams Brewery",b:"Tour and tasting in Jamaica Plain",u:"https://www.samueladams.com/"},
- esplanade_walk:{n:"Sunset walk on the Esplanade",b:"Free and romantic",u:""},
- trivia:{n:"Trivia night",b:"Bar trivia, big-brain energy",u:""},
- harvard_drinks:{n:"Drinks in Harvard Square",b:"Bars near home",u:""},
- early_in:{n:"Early night in",b:"Rest up, arrival mode",u:""}
-};
-const NIGHTS={
- d25:["esplanade_walk","harvard_drinks","early_in"],
- d26:["viewboston","improv","wallys"],
- d28:["laugh","coolidge","trivia"],
- d01:["wallys","esplanade_walk","coolidge"],
- d03:["viewboston","improv","samadams"],
- d08:["laugh","esplanade_walk","trivia"]
+const DESSERTS=[
+ {id:"mikes",n:"Mike's Pastry",b:"North End icon — the famous cannoli box",u:"https://www.mikespastry.com/"},
+ {id:"modern",n:"Modern Pastry",b:"North End — the locals' counter-pick",u:"https://www.modernpastry.com/"},
+ {id:"bovas",n:"Bova's Bakery",b:"Open 24 hours — late-night cannoli run",u:"http://bovabakeryboston.net/"},
+ {id:"tosci",n:"Toscanini's",b:"Cambridge — called the world's best ice cream",u:"http://www.tosci.com/"},
+ {id:"jplicks",n:"J.P. Licks",b:"Local ice cream chain, creative flavors",u:"https://www.jplicks.com/"},
+ {id:"flour",n:"Flour Bakery",b:"Sticky buns and famous pastries",u:"https://flourbakery.com/"}
+];
+/* Per-day tonight events. Filled with researched events (5-6 per day, each with link).
+   __EVENTS_PLACEHOLDER__ */
+/* Per-day tonight events — researched Oct 14, 2026. All votable, each with ticket/info link. */
+const TONIGHT={
+ d25:[
+  {"id": "e251", "n": "Rod Wave: Don't Look Down Tour", "b": "Hip-hop arena show at TD Garden, 8 PM", "u": "https://www.ticketmaster.com/rod-wave-dont-look-down-tour-boston-massachusetts-10-25-2026/event/010064D0AF18F3E7"},
+  {"id": "e252", "n": "Movements w/ Balance & Composure", "b": "Post-hardcore co-headline at Roadrunner, 7 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A70bev"},
+  {"id": "e253", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 6:30 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-10-25-2026/event/0100648A155142CD"},
+  {"id": "e254", "n": "The Man in Black", "b": "Johnny Cash tribute at The Wilbur, 8 PM", "u": "https://www.ticketmaster.com/the-man-in-black-a-tribute-boston-massachusetts-10-25-2026/event/01006481DCC7F744"},
+  {"id": "e255", "n": "MARIS", "b": "Indie pop at Brighton Music Hall, 7 PM", "u": "https://www.ticketmaster.com/maris-boston-massachusetts-10-25-2026/event/010064BBEA867B15"},
+  {"id": "e256", "n": "Dale Elliot Jr.", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d26:[
+  {"id": "e261", "n": "Boston Celtics vs Chicago Bulls", "b": "NBA at TD Garden, 7:30 PM", "u": "https://www.ticketmaster.com/boston-celtics-vs-chicago-bulls-boston-massachusetts-10-26-2026/event/0100650C94609400"},
+  {"id": "e262", "n": "L7: The Last Hurrah Tour", "b": "Punk legends' farewell tour at The Wilbur, 8 PM", "u": "https://www.ticketmaster.com/l7-the-last-hurrah-tour-2026-boston-massachusetts-10-26-2026/event/010064A5885A8E25"},
+  {"id": "e263", "n": "Hokus Pokus Live", "b": "Halloween magic-comedy revue, 8 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A7P7Za"},
+  {"id": "e264", "n": "LØLØ", "b": "Pop-punk at Brighton Music Hall, 7 PM", "u": "https://www.ticketmaster.com/ll-god-forbid-a-girl-goes-boston-massachusetts-10-26-2026/event/010064ABB005FD3A"},
+  {"id": "e265", "n": "Bassvictim with Thoom", "b": "Electronic bass night, 18+ at Roadrunner, 8 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1AAZg0-"}
+ ],
+ d27:[
+  {"id": "e271", "n": "Boston Celtics vs Brooklyn Nets", "b": "NBA at TD Garden, 7:30 PM", "u": "https://www.ticketmaster.com/boston-celtics-vs-brooklyn-nets-boston-massachusetts-10-27-2026/event/0100650C9466940C"},
+  {"id": "e272", "n": "The Rocky Horror Picture Show", "b": "Halloween classic screening, 7:30 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A70v77"},
+  {"id": "e273", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 7 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-10-27-2026/event/0100648A155A42E7"},
+  {"id": "e274", "n": "Postmodern Jukebox", "b": "Vintage-style pop covers at The Wilbur, 8 PM", "u": "https://www.ticketmaster.com/scott-bradlees-postmodern-jukebox-the-future-boston-massachusetts-10-27-2026/event/0100649CCE447E1E"},
+  {"id": "e275", "n": "Maddie Zahm", "b": "Singer-songwriter at Brighton Music Hall, 7 PM", "u": "https://www.ticketmaster.com/maddie-zahm-everything-all-the-time-boston-massachusetts-10-27-2026/event/010064C2B659D152"},
+  {"id": "e276", "n": "THE ARMY, THE NAVY", "b": "Indie duo at Paradise Rock Club, 7 PM", "u": "https://www.ticketmaster.com/the-army-the-navy-the-fake-boston-massachusetts-10-27-2026/event/010064CBE05D25E2"}
+ ],
+ d28:[
+  {"id": "e281", "n": "Arcángel: La 8va Maravilla World Tour", "b": "Latin trap superstar at MGM Music Hall, 8 PM", "u": "https://www.ticketmaster.com/arcangel-la-8va-maravilla-world-tour-boston-massachusetts-10-28-2026/event/010064ADC0FD59D3"},
+  {"id": "e282", "n": "KATSEYE: The Wildworld Tour", "b": "K-pop group arena show at TD Garden, 8 PM", "u": "https://www.ticketmaster.com/katseye-the-wildworld-tour-boston-massachusetts-10-28-2026/event/010064A9ECAFEAEC"},
+  {"id": "e283", "n": "Candlebox", "b": "90s rock at House of Blues, 6:30 PM", "u": "https://www.ticketmaster.com/candlebox-cant-quit-you-tour-fall-boston-massachusetts-10-28-2026/event/010064DDA7B7E4D9"},
+  {"id": "e284", "n": "Yebba", "b": "Grammy-winning R&B at Roadrunner, 8 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1AAvove"},
+  {"id": "e285", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 7 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-10-28-2026/event/0100648A155F430E"},
+  {"id": "e286", "n": "Toad The Wet Sprocket", "b": "Acoustic set at The Wilbur, 8 PM", "u": "https://www.ticketmaster.com/toad-the-wet-sprocket-rings-the-boston-massachusetts-10-28-2026/event/010064BCE74E2795"}
+ ],
+ d29:[
+  {"id": "e291", "n": "John Summit: Ctrl Escape Arena Tour", "b": "EDM arena show at TD Garden, 7 PM", "u": "https://www.ticketmaster.com/john-summit-ctrl-escape-arena-tour-boston-massachusetts-10-29-2026/event/010064B2AC06B8C3"},
+  {"id": "e292", "n": "The Moth Mainstage", "b": "Live storytelling at The Wilbur, 7:30 PM", "u": "https://www.ticketmaster.com/the-moth-mainstage-boston-massachusetts-10-29-2026/event/010064D2BAC1578A"},
+  {"id": "e293", "n": "Mochakk", "b": "Brazilian house DJ, 21+ at Big Night Live, 10 PM", "u": "https://www.ticketmaster.com/mochakk-21-boston-massachusetts-10-29-2026/event/01006504CBA7A4B2"},
+  {"id": "e294", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 7:30 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-10-29-2026/event/0100648A15644325"},
+  {"id": "e295", "n": "Jessimae Peluso", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"},
+  {"id": "e296", "n": "Grahame Lesh & Friends", "b": "Jam-rock at Paradise Rock Club, 18+, 7 PM", "u": "https://www.ticketmaster.com/grahame-lesh-friends-18-boston-massachusetts-10-29-2026/event/0100650ED5953028"}
+ ],
+ d30:[
+  {"id": "e301", "n": "RAWAYANA", "b": "Venezuelan alt band at MGM Music Hall, 8 PM", "u": "https://www.ticketmaster.com/rawayana-donde-es-el-after-world-boston-massachusetts-10-30-2026/event/0100646BB6AF2693"},
+  {"id": "e302", "n": "Boston Celtics vs Chicago Bulls", "b": "NBA Cup group play at TD Garden, 7:30 PM", "u": "https://www.ticketmaster.com/boston-celtics-vs-chicago-bulls-boston-massachusetts-10-30-2026/event/0100650C946B9414"},
+  {"id": "e303", "n": "Punchis Punchis: Banda Rave Experience", "b": "Banda + rave Halloween party, 18+ at House of Blues, 8 PM", "u": "https://www.ticketmaster.com/punchis-punchis-banda-rave-experience-18-boston-massachusetts-10-30-2026/event/0100651C01694258"},
+  {"id": "e304", "n": "Perreoween Eve", "b": "Latin perreo Halloween party, 21+ at Big Night Live, 9:30 PM", "u": "https://www.ticketmaster.com/yqb-presents-perreoween-eve-21-boston-massachusetts-10-30-2026/event/01006519C08D36D8"},
+  {"id": "e305", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 8 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-10-30-2026/event/0100648A15684332"},
+  {"id": "e306", "n": "Splou", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d31:[
+  {"id": "e311", "n": "Boston Bruins vs Chicago Blackhawks", "b": "NHL Halloween matinee at TD Garden, 1 PM", "u": "https://www.ticketmaster.com/boston-bruins-vs-chicago-blackhawks-boston-massachusetts-10-31-2026/event/010064EDC5047A13"},
+  {"id": "e312", "n": "Blade Runner Live", "b": "Sci-fi classic with its Vangelis score played live, 7 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A70K-e"},
+  {"id": "e313", "n": "Trixie and Katya's Halloween Dance Party", "b": "Drag Halloween dance party, 18+ at Royale, 9 PM", "u": "https://www.ticketweb.com/event/trixies-halloween-dance-party-royale-boston-tickets/14306414?REFERRAL_ID=tmfeed"},
+  {"id": "e314", "n": "Halloween Favela Encantada", "b": "Brazilian funk Halloween party, 18+ at Big Night Live, 9 PM", "u": "https://www.universe.com/events/halloween-favela-encantada-boston-18-oct-31-studio-b-big-night-live-tickets-F7CTS1?ref=ticketmaster"},
+  {"id": "e315", "n": "horsegiirL", "b": "Hyperpop DJ Halloween set, 18+ at Roadrunner, 10 PM", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A709qy"},
+  {"id": "e316", "n": "Salem Haunted Happenings: Halloween Night", "b": "Salem's famous Halloween night in the Witch City (30 min by commuter rail)", "u": "https://www.hauntedhappenings.org/about/"}
+ ],
+ d01:[
+  {"id": "e011", "n": "Ana Castela", "b": "Brazilian sertanejo star, all ages show", "u": "https://www.universe.com/events/ana-castela-boston-all-ages-november-1st-big-night-live-tickets-Q21XJ4?ref=ticketmaster"},
+  {"id": "e012", "n": "Vince Staples", "b": "West Coast hip-hop veteran, Roadrunner", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A7PE8w"},
+  {"id": "e013", "n": "Eivør", "b": "Faroese singer with a huge voice, 18+", "u": "https://www.ticketmaster.com/eivr-18-boston-massachusetts-11-01-2026/event/01006497E14D0E65"},
+  {"id": "e014", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 6:30 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-01-2026/event/0100648A1577438C"},
+  {"id": "e015", "n": "National Park After Dark", "b": "Comedy podcast recorded live with national-park stories", "u": "https://www.ticketmaster.com/national-park-after-dark-your-neck-boston-massachusetts-11-01-2026/event/010064F5C814E851"},
+  {"id": "e016", "n": "Orlando Baxter (Live from South High)", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d02:[
+  {"id": "e021", "n": "Boston Bruins vs Vegas Golden Knights", "b": "NHL at TD Garden, 7 PM", "u": "https://www.ticketmaster.com/boston-bruins-vs-vegas-golden-knights-boston-massachusetts-11-02-2026/event/010064EDC5097A28"},
+  {"id": "e022", "n": "An Evening with Aaron Tveit", "b": "Tony-winning Broadway star in concert", "u": "https://www.ticketmaster.com/event/Z7r9jZ1AAZz86"},
+  {"id": "e023", "n": "MICO: Running From A Feeling Tour", "b": "Toronto pop singer-songwriter, Paradise Rock Club", "u": "https://www.ticketmaster.com/mico-running-from-a-feeling-tour-boston-massachusetts-11-02-2026/event/010064ADC6946F0F"},
+  {"id": "e024", "n": "The Music of Hey Arnold! Live", "b": "Nostalgia concert with the show's original composer", "u": "https://www.ticketmaster.com/the-music-of-hey-arnold-live-boston-massachusetts-11-02-2026/event/0100650DAD66F30E"},
+  {"id": "e025", "n": "Madds Buckley", "b": "Indie folk-pop at Brighton Music Hall", "u": "https://www.ticketmaster.com/madds-buckley-20262027-north-american-tour-boston-massachusetts-11-02-2026/event/010064F4A7981A38"},
+  {"id": "e026", "n": "This Is Lorelei", "b": "Bedroom-pop project live at Royale Boston", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A70OFg"}
+ ],
+ d03:[
+  {"id": "e031", "n": "Sleeping With Sirens: An Ending In Itself Tour", "b": "Post-hardcore veterans at House of Blues", "u": "https://www.ticketmaster.com/sleeping-with-sirens-an-ending-in-boston-massachusetts-11-03-2026/event/010064CBBA017666"},
+  {"id": "e032", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 7 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-03-2026/event/0100648A158043BC"},
+  {"id": "e033", "n": "Black Violin: The Be Free Tour", "b": "Hip-hop meets classical strings duo", "u": "https://www.ticketmaster.com/black-violin-the-be-free-tour-boston-massachusetts-11-03-2026/event/010064D0E2A0B346"},
+  {"id": "e034", "n": "RaiNao", "b": "Puerto Rican alt-pop at Paradise Rock Club", "u": "https://www.ticketmaster.com/rainao-boston-massachusetts-11-03-2026/event/01006504BA4056C"},
+  {"id": "e035", "n": "AJ McLean", "b": "Backstreet Boy's solo Better Man Tour at Royale", "u": "https://www.ticketweb.com/event/aj-mclean-the-royale-boston-tickets/14328024?REFERRAL_ID=tmfeed"},
+  {"id": "e036", "n": "Gavn!", "b": "Rising pop act, 18+ at Brighton Music Hall", "u": "https://www.ticketmaster.com/gavn-18-boston-massachusetts-11-03-2026/event/010064D2CA33A441"}
+ ],
+ d04:[
+  {"id": "e041", "n": "Boston Celtics vs Milwaukee Bucks", "b": "NBA at TD Garden, 7:30 PM", "u": "https://www.ticketmaster.com/boston-celtics-vs-milwaukee-bucks-boston-massachusetts-11-04-2026/event/0100650C94709436"},
+  {"id": "e042", "n": "WICKED", "b": "Broadway blockbuster at Citizens Opera House, 7 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-04-2026/event/0100648A158443CB"},
+  {"id": "e043", "n": "Michelle Branch", "b": "90s alt-pop hitmaker at Roadrunner", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A7J4Zs"},
+  {"id": "e044", "n": "Rocky In Concert", "b": "The film screened with its score played live", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A7PIOf"},
+  {"id": "e045", "n": "Best Friends with Nicole Byer & Sasheer Zamata", "b": "Comedy podcast recorded live at The Wilbur", "u": "https://www.ticketmaster.com/best-friends-with-nicole-byer-sasheer-boston-massachusetts-11-04-2026/event/010064BDBEA2F1A2"},
+  {"id": "e046", "n": "Michael Rapaport", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d05:[
+  {"id": "e051", "n": "Chief Keef", "b": "Chicago drill pioneer at MGM Music Hall", "u": "https://www.ticketmaster.com/chief-keef-boston-massachusetts-11-05-2026/event/010064DEB7551F71"},
+  {"id": "e052", "n": "Tim Dillon", "b": "Stand-up at The Wilbur, 7:30 PM (selling fast)", "u": "https://www.ticketmaster.com/tim-dillon-boston-massachusetts-11-05-2026/event/0100650D9E50C422"},
+  {"id": "e053", "n": "The Knocks", "b": "Electronic dance duo at Big Night Live", "u": "https://www.ticketmaster.com/the-knocks-boston-massachusetts-11-05-2026/event/0100652A85798E1D"},
+  {"id": "e054", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 7:30 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-05-2026/event/0100648A158943D2"},
+  {"id": "e055", "n": "Palace", "b": "UK alt-rock at House of Blues", "u": "https://www.ticketmaster.com/palace-usa-canada-tour-2026-boston-massachusetts-11-05-2026/event/0100648FE017E9D0"},
+  {"id": "e056", "n": "Comedic Cody Smith", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d06:[
+  {"id": "e061", "n": "Gavin Adcock", "b": "Country singer at MGM Music Hall, 7 PM", "u": "https://www.ticketmaster.com/gavin-adcock-the-day-i-hang-boston-massachusetts-11-06-2026/event/0100646BAF2A0820"},
+  {"id": "e062", "n": "Tim Dillon", "b": "Stand-up at The Wilbur, two shows 7:30 & 10 PM", "u": "https://www.ticketmaster.com/tim-dillon-boston-massachusetts-11-06-2026/event/01006505CB3A3F75"},
+  {"id": "e063", "n": "Svdden Death", "b": "Heavy dubstep, 18+ at Big Night Live", "u": "https://www.ticketmaster.com/svdden-death-18-boston-massachusetts-11-06-2026/event/0100650336F8E8B0"},
+  {"id": "e064", "n": "CamelPhat", "b": "Grammy-nominated house DJs, 21+ at Royale", "u": "https://www.ticketweb.com/event/camelphat-royale-boston-tickets/14328034?REFERRAL_ID=tmfeed"},
+  {"id": "e065", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 8 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-06-2026/event/0100648A158D43F4"},
+  {"id": "e066", "n": "Joe Fenti", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"}
+ ],
+ d07:[
+  {"id": "e071", "n": "Comics Come Home", "b": "Boston's annual star-studded comedy benefit, 8 PM", "u": "https://www.ticketmaster.com/comics-come-home-boston-massachusetts-11-07-2026/event/010064D0A4D3D305"},
+  {"id": "e072", "n": "Sammy Rae & The Friends", "b": "High-energy soul/funk party at MGM Music Hall", "u": "https://www.ticketmaster.com/sammy-rae-the-friends-the-get-boston-massachusetts-11-07-2026/event/0100643792A5BFB1"},
+  {"id": "e073", "n": "A Boogie Wit Da Hoodie", "b": "10 Years of Artist anniversary show at Agganis Arena", "u": "https://www.ticketmaster.com/a-boogie-wit-da-hoodie-10-boston-massachusetts-11-07-2026/event/010065318DD99789"},
+  {"id": "e074", "n": "Hudson Westbrook", "b": "Rising country star at Roadrunner", "u": "https://www.ticketmaster.com/event/Z7r9jZ1A7J3-y"},
+  {"id": "e075", "n": "Tina Friml", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"},
+  {"id": "e076", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 8 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-07-2026/event/0100648A15924418"}
+ ],
+ d08:[
+  {"id": "e081", "n": "Boston Bruins vs Florida Panthers", "b": "NHL Sunday matinee at TD Garden, 1 PM", "u": "https://www.ticketmaster.com/boston-bruins-vs-florida-panthers-boston-massachusetts-11-08-2026/event/010064EDC50E7A3B"},
+  {"id": "e082", "n": "Wicked", "b": "Broadway blockbuster at Citizens Opera House, 6:30 PM", "u": "https://www.ticketmaster.com/wicked-touring-boston-massachusetts-11-08-2026/event/0100648A159B445F"},
+  {"id": "e083", "n": "Wheeler Walker Jr.", "b": "Outlaw-country comedy farewell tour at House of Blues", "u": "https://www.ticketmaster.com/wheeler-walker-jr-pullin-out-the-boston-massachusetts-11-08-2026/event/010064B6DC9AB08D"},
+  {"id": "e084", "n": "Lil Mo Mozzarella", "b": "Stand-up at the Seaport comedy club", "u": "http://www.laughboston.com/"},
+  {"id": "e085", "n": "Red Leather: Tahoe Tour", "b": "Alt-country at Brighton Music Hall, 7 PM", "u": "https://www.ticketmaster.com/red-leather-tahoe-tour-boston-massachusetts-11-08-2026/event/0100646DAD20201B"}
+ ],
+ d09:[
+ ]
 };
 const CLUBS=[
- {id:"bijou",n:"Bijou",b:"Theater District mega-club"},
- {id:"grand",n:"The Grand",b:"Big-room club, downtown"},
- {id:"royale",n:"Royale",b:"Concert-sized club nights"},
- {id:"club51",n:"51",b:"Your call, Diego"},
- {id:"latin",n:"Latin party hunt",b:"Find tonight's Latin party in the live listings below"},
- {id:"bars",n:"Bar night instead",b:"Cocktail bars, no cover"},
- {id:"rest",n:"Rest night",b:"Recharge for tomorrow"}
+ {id:"bijou",n:"Bijou",b:"Theater District mega-club",u:""},
+ {id:"grand",n:"The Grand",b:"Big-room club, downtown",u:""},
+ {id:"royale",n:"Royale",b:"Concert-sized club nights",u:""},
+ {id:"club51",n:"51",b:"Your call, Diego",u:""},
+ {id:"latin",n:"Latin party hunt",b:"Find tonight's Latin party in the live listings below",u:""},
+ {id:"bars",n:"Bar night instead",b:"Cocktail bars, no cover",u:""},
+ {id:"rest",n:"Rest night",b:"Recharge for tomorrow",u:""}
 ];
 const LATIN_LINKS=[
  {n:"Eventbrite: Latin parties in Boston",u:"https://www.eventbrite.com/d/ma--boston/latin-party/"},
  {n:"Dice: Boston events",u:"https://dice.fm/"}
 ];
-const VIBES=[
- {id:"chill",n:"Chill",b:"Slow morning, no rush"},
- {id:"adventure",n:"Adventure",b:"Pack the day full"},
- {id:"romantic",n:"Romantic",b:"Date-mode on"},
- {id:"culture",n:"Culture deep-dive",b:"Museums and history"},
- {id:"foodie",n:"Foodie",b:"Eat our way through the day"}
-];
-const DESSERTS=[
- {id:"mikes",n:"Mike's Pastry",b:"The famous tourist pick"},
- {id:"modern",n:"Modern Pastry",b:"The locals' pick"},
- {id:"bovas",n:"Bova's Bakery",b:"Open 24 hours, underdog"}
-];
-const LOCKED={
- d27:{n:"Celtics vs Nets · 7:30 PM",b:"TD Garden — tickets already sorted",u:"https://www.ticketmaster.com/boston-celtics-vs-brooklyn-nets-boston-massachusetts-10-27-2026/event/0100650C9466940C"},
- d30:{n:"RAWAYANA · 8 PM",b:"MGM Music Hall — tickets already sorted",u:"",after:"after"},
- d02:{n:"Bruins vs Golden Knights · 7 PM",b:"TD Garden — tickets already sorted",u:"https://www.ticketmaster.com/boston-bruins-vs-vegas-golden-knights-boston-massachusetts-11-02-2026/event/010064EDC5097A28"},
- d04:{n:"WICKED · 7 PM",b:"Citizens Opera House — tickets via Broadway In Boston",u:""},
- d07:{n:"Comics Come Home · 8 PM",b:"TD Garden — tickets already sorted",u:"",after:"after"}
-};
-const CATS=[
- {id:"places",t:"Places to visit"},
- {id:"food",t:"Food"},
- {id:"tonight",t:"Tonight"},
- {id:"vibe",t:"Vibe of the day"},
- {id:"dessert",t:"Sweet tooth showdown"}
-];
 const VOTERS={diego:{n:"Diego",c:"#4da3ff"},juandiego:{n:"Juan Diego",c:"#d4af37"}};
+const CATMAX={places:3,food:2,tonight:3,dessert:3};
+const CATTITLES={places:"Places to visit",food:"Food",tonight:"Tonight",dessert:"Dessert"};
 /* ================= STATE ================= */
 function blankState(){return {me:"diego",votes:{diego:{},juandiego:{}},cuisine:{},decided:{}};}
 let S=blankState();
-let curDay="d25", showResults=false, loadedShared=false;
+let MODE="admin", VDAY=null, curDay="d25", showResults=false, loadedShared=false;
 function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
 function dec(s){try{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return JSON.parse(decodeURIComponent(escape(atob(s))));}catch(e){return null;}}
-function saveLocal(){try{localStorage.setItem("btv1",enc(S));}catch(e){}}
-function syncHash(){try{history.replaceState(null,"","#s="+enc(S));}catch(e){} saveLocal();}
+function parseHash(){
+  const out={state:null,mode:"admin",day:null};
+  location.hash.replace(/^#/,"").split("&").forEach(p=>{
+    if(p.indexOf("s=")===0)out.state=dec(p.slice(2));
+    else if(p.indexOf("mode=")===0)out.mode=p.slice(5);
+    else if(p.indexOf("day=")===0)out.day=p.slice(4);
+  });
+  return out;
+}
+function saveLocal(){try{localStorage.setItem("btv2",enc(S));}catch(e){}}
+function syncHash(){
+  let h="#s="+enc(S);
+  if(MODE==="voter"&&VDAY)h+="&mode=voter&day="+VDAY;
+  try{history.replaceState(null,"",h);}catch(e){}
+  saveLocal();
+}
 function loadState(){
-  let h="";
-  if(location.hash.indexOf("#s=")===0){h=location.hash.slice(3);}
-  if(h){const d=dec(h); if(d&&d.votes){S=Object.assign(blankState(),d); loadedShared=true; return;}}
-  try{const l=localStorage.getItem("btv1"); if(l){const d=dec(l); if(d&&d.votes)S=Object.assign(blankState(),d);}}catch(e){}
+  const p=parseHash();
+  if(p.state&&p.state.votes){S=Object.assign(blankState(),p.state);loadedShared=true;}
+  else{try{const l=localStorage.getItem("btv2");if(l){const d=dec(l);if(d&&d.votes)S=Object.assign(blankState(),d);}}catch(e){}}
+  if(p.mode==="voter"&&p.day&&ORDER.indexOf(p.day)>=0){MODE="voter";VDAY=p.day;S.me="juandiego";curDay=p.day;}
 }
 /* ================= HELPERS ================= */
 const $=id=>document.getElementById(id);
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function dayVotes(voter,dayId,cat){const d=S.votes[voter]&&S.votes[voter][dayId];return (d&&d[cat])||[];}
-function myVotes(dayId,cat){return dayVotes(S.me,dayId,cat);}
-function rankOf(voter,dayId,cat,optId){const a=dayVotes(voter,dayId,cat);const i=a.indexOf(optId);return i>=0?i+1:0;}
+function dayVotes(v,d,c){const x=S.votes[v]&&S.votes[v][d];return (x&&x[c])||[];}
+function hasVotes(v,dayId){const x=S.votes[v]&&S.votes[v][dayId];return !!(x&&Object.keys(x).some(k=>x[k]&&x[k].length));}
+function myVotes(d,c){return dayVotes(S.me,d,c);}
+function rankOf(v,d,c,o){const a=dayVotes(v,d,c);const i=a.indexOf(o);return i>=0?i+1:0;}
 function decidedBefore(dayId){
   const idx=ORDER.indexOf(dayId),out=new Set();
   ORDER.slice(0,idx).forEach(did=>{const w=S.decided[did];if(w&&w.places)out.add(w.places);});
   return out;
 }
-function placesFor(dayId){const gone=decidedBefore(dayId);return PLACES.filter(p=>!gone.has(p.id));}
-function isClubNight(dayId){return ["d29","d31","d05","d06"].indexOf(dayId)>=0;}
-function tonightKind(dayId){
-  if(dayId==="d09")return "none";
-  const L=LOCKED[dayId];
-  if(L)return L.after?"locked_after":"locked";
-  if(NIGHTS[dayId])return "nightopts";
-  if(isClubNight(dayId))return "clubs";
-  return "none";
+function placesFor(dayId){const g=decidedBefore(dayId);return PLACES.filter(p=>!g.has(p.id));}
+function tonightOpts(dayId){
+  let list=(TONIGHT[dayId]||[]).slice();
+  if(CLUB_NIGHTS.indexOf(dayId)>=0)list=list.concat(CLUBS);
+  return list;
 }
-function clubOpts(){return CLUBS;}
-function nightOpts(dayId){return NIGHTS[dayId].map(id=>Object.assign({id},NIGHTPOOL[id]));}
+function dessertFor(dayId){return DESSERT_DAYS.indexOf(dayId)>=0?DESSERTS:[];}
+function catsFor(dayId){
+  const c=["places","food"];
+  if(tonightOpts(dayId).length)c.push("tonight");
+  if(dessertFor(dayId).length)c.push("dessert");
+  return c;
+}
+function catOpts(dayId,cat){
+  if(cat==="places")return placesFor(dayId);
+  if(cat==="food")return FOODS;
+  if(cat==="tonight")return tonightOpts(dayId);
+  if(cat==="dessert")return dessertFor(dayId);
+  return [];
+}
 /* ================= RENDER ================= */
-function renderIdentity(){
-  $("btnDiego").className="idbtn"+(S.me==="diego"?" on-diego":"");
-  $("btnJD").className="idbtn"+(S.me==="juandiego"?" on-jd":"");
+function renderTop(){
+  if(MODE==="voter"){
+    const d=DAYS.find(x=>x.id===VDAY);
+    $("topbar").innerHTML=`<div class="voterbar">Voting as <b>Juan Diego</b> · ${esc(d.d)} — ${esc(d.label)}. Pick your tops, then send them to Diego.</div>`;
+    $("daybar").style.display="none";
+  }else{
+    $("daybar").style.display="block";
+    $("topbar").innerHTML=`<header>
+      <h1>Boston Trip Vote <span class="amp">·</span> <span style="font-weight:400;font-size:14px;">Oct 25 – Nov 9</span></h1>
+      <p>Diego &amp; Juan Diego · admin view — you see everything</p>
+      <div class="idrow"><span class="lbl">Voting as:</span>
+      <button class="idbtn" id="btnDiego"><span class="dot" style="background:#4da3ff"></span>Diego</button>
+      <button class="idbtn" id="btnJD"><span class="dot" style="background:#d4af37"></span>Juan Diego</button></div>
+    </header>`;
+    $("btnDiego").className="idbtn"+(S.me==="diego"?" on-diego":"");
+    $("btnJD").className="idbtn"+(S.me==="juandiego"?" on-jd":"");
+    $("btnDiego").onclick=()=>{S.me="diego";showResults=false;syncHash();renderAll();};
+    $("btnJD").onclick=()=>{S.me="juandiego";showResults=false;syncHash();renderAll();};
+  }
 }
 function dayStatus(dayId){
   if(S.decided[dayId]&&Object.keys(S.decided[dayId]).length)return "lock";
-  const a=dayVotes("diego",dayId),b=dayVotes("juandiego",dayId);
-  const ha=a&&Object.keys(a).length, hb=b&&Object.keys(b).length;
-  if(ha&&hb)return "two"; if(ha||hb)return "one"; return "";
+  const ha=hasVotes("diego",dayId),hb=hasVotes("juandiego",dayId);
+  if(ha&&hb)return "two";if(ha||hb)return "one";return "";
 }
 function renderChips(){
   $("daychips").innerHTML=DAYS.map(d=>{
     const st=dayStatus(d.id);
     const dot=st==="lock"?'<i class="lock"></i>':st==="two"?'<i class="two"></i><i class="two"></i>':st==="one"?'<i class="one"></i>':"<i></i>";
-    const parts=d.d.split(" ");
-    return `<button class="chip${d.id===curDay?" on":""}" data-day="${d.id}"><b>${parts[0]}</b>${parts[1]} ${parts[2]}<span class="st">${dot}</span></button>`;
+    const p=d.d.split(" ");
+    return `<button class="chip${d.id===curDay?" on":""}" data-day="${d.id}"><b>${p[0]}</b>${p[1]} ${p[2]}<span class="st">${dot}</span></button>`;
   }).join("");
-  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{curDay=c.dataset.day;showResults=false;syncHash();renderAll();});
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{curDay=c.dataset.day;showResults=false;renderAll();window.scrollTo(0,0);});
 }
 function optHTML(dayId,cat,o){
-  const mine=myVotes(dayId,cat),ri=mine.indexOf(o.id);
+  const max=CATMAX[cat],mine=myVotes(dayId,cat),ri=mine.indexOf(o.id);
   const r1=rankOf("diego",dayId,cat,o.id),r2=rankOf("juandiego",dayId,cat,o.id);
   let tags="";
-  if(r1)tags+=`<span class="vtag d">Diego #${r1}</span>`;
-  if(r2)tags+=`<span class="vtag j">Juan Diego #${r2}</span>`;
+  if(MODE==="admin"){
+    if(r1)tags+=`<span class="vtag d">Diego #${r1}</span>`;
+    if(r2)tags+=`<span class="vtag j">Juan Diego #${r2}</span>`;
+  }else if(r2)tags+=`<span class="vtag j">Your pick #${r2}</span>`;
   const link=o.u?`<a class="go" href="${esc(o.u)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open link</a>`:"";
   return `<button class="opt${ri>=0?" picked":""}" data-cat="${cat}" data-opt="${esc(o.id)}">
     ${ri>=0?`<span class="rank">${ri+1}</span>`:""}
-    <span class="nm">${esc(o.n)}</span>
-    ${o.b?`<div class="bl">${esc(o.b)}</div>`:""}
-    ${link}${tags?`<div class="votes">${tags}</div>`:""}
-  </button>`;
-}
-function lockedBanner(L){
-  return `<div class="locked"><div class="nm">${esc(L.n)}</div><div class="bl">${esc(L.b)}</div>
-  ${L.u?`<a href="${esc(L.u)}" target="_blank" rel="noopener">Get tickets</a>`:""}</div>`;
+    <span class="nm">${esc(o.n)}</span>${o.b?`<div class="bl">${esc(o.b)}</div>`:""}
+    ${link}${tags?`<div class="votes">${tags}</div>`:""}</button>`;
 }
 function latinCard(){
   return `<div class="notice"><b>Tonight's Latin parties — live listings.</b><br>These pages always show what's actually on:<br>
   ${LATIN_LINKS.map(l=>`<a class="extbtn" href="${esc(l.u)}" target="_blank" rel="noopener">${esc(l.n)}</a>`).join("")}</div>`;
 }
-function foodCard(dayId){
-  const dec=S.decided[dayId]&&S.decided[dayId].food;
-  let h=`<div class="card"><h3>Food</h3><p class="sub">Rank your top 3. Tap again to remove.</p>`;
-  if(dec){const o=FOODS.find(f=>f.id===dec);h+=`<div class="locked"><div class="nm">${esc(o.n)}</div><div class="bl">Decided</div></div>`;}
-  else h+=FOODS.map(o=>optHTML(dayId,"food",o)).join("");
-  const cur=S.cuisine[dayId]||"";
-  h+=`<p class="sub" style="margin-top:10px">If "We go out to eat" wins — cuisine:</p>
-    <select id="cuisineSel"><option value="">Pick a cuisine…</option>
-    ${CUISINES.map(c=>`<option${c===cur?" selected":""}>${c}</option>`).join("")}</select></div>`;
-  return h;
-}
-function tonightCard(dayId){
-  const kind=tonightKind(dayId);
-  if(kind==="none")return "";
-  const dec=S.decided[dayId]&&S.decided[dayId].tonight;
-  let h=`<div class="card"><h3>Tonight</h3>`;
-  if(kind==="locked"){h+=`<p class="sub">Already sorted — no vote needed.</p>`+lockedBanner(LOCKED[dayId]);}
-  else{
-    if(kind==="locked_after")h+=lockedBanner(LOCKED[dayId])+`<p class="sub"><b>After the show</b> — rank your top 3:</p>`;
-    else if(kind==="clubs")h+=`<p class="sub">Clubbing night — rank your top 3. ${dayId==="d31"?"<b>Halloween: buy tickets in advance, expect lines.</b>":""}</p>`;
-    else h+=`<p class="sub">Rank your top 3. Tap again to remove.</p>`;
-    if(dec){
-      const pool=kind==="clubs"?clubOpts():(kind==="nightopts"?nightOpts(dayId):clubOpts());
-      const o=pool.find(x=>x.id===dec);
-      h+=`<div class="locked"><div class="nm">${esc(o?o.n:dec)}</div><div class="bl">Decided</div></div>`;
-    }else{
-      const pool=kind==="clubs"?clubOpts():nightOpts(dayId);
-      h+=pool.map(o=>optHTML(dayId,"tonight",o)).join("");
-    }
-    if(kind==="clubs"||kind==="locked_after")h+=latinCard();
-  }
-  return h+`</div>`;
-}
-function catCard(dayId,cat,title,sub,opts,decId){
-  let h=`<div class="card"><h3>${title}</h3><p class="sub">${sub}</p>`;
-  if(decId){
-    const o=opts.find(x=>x.id===decId);
-    h+=`<div class="locked"><div class="nm">${esc(o?o.n:decId)}</div><div class="bl">Decided</div></div>`;
+function catCard(dayId,cat){
+  const max=CATMAX[cat],opts=catOpts(dayId,cat),dec=S.decided[dayId]&&S.decided[dayId][cat];
+  const subs={places:`Rank your top ${max}. Picked places leave the pool for later days.`,
+    food:`Pick your top ${max}.`,tonight:`Rank your top ${max}. Tap again to remove.`,
+    dessert:`Famous Boston dessert spots — rank your top ${max}.`};
+  let h=`<div class="card"><h3>${CATTITLES[cat]}</h3><p class="sub">${subs[cat]}</p>`;
+  if(dec){
+    const o=opts.find(x=>x.id===dec);
+    h+=`<div class="locked"><div class="nm">${esc(o?o.n:dec)}</div><div class="bl">Decided</div></div>`;
   }else h+=opts.map(o=>optHTML(dayId,cat,o)).join("");
+  if(cat==="food"){
+    const cur=S.cuisine[dayId]||"";
+    h+=`<p class="sub" style="margin-top:10px">If "We go out to eat" wins — cuisine:</p>
+    <select id="cuisineSel"><option value="">Pick a cuisine…</option>
+    ${CUISINES.map(c=>`<option${c===cur?" selected":""}>${c}</option>`).join("")}</select>`;
+  }
+  if(cat==="tonight"&&CLUB_NIGHTS.indexOf(dayId)>=0)h+=latinCard();
   return h+`</div>`;
 }
 function renderDay(){
   const d=DAYS.find(x=>x.id===curDay);
-  let h=`<div class="dayhead"><h2>${d.d}</h2><p>${esc(d.label)}</p></div>`;
-  if(loadedShared){h+=`<div class="notice"><b>Votes loaded from the shared link.</b> Pick who you are up top, add your rankings, then share the link back so you stay in sync.</div>`;loadedShared=false;}
-  const dec=S.decided[curDay]||{};
-  h+=catCard(curDay,"places","Places to visit","Rank your top 3. Picked places leave the pool for later days.",placesFor(curDay),dec.places);
-  h+=foodCard(curDay);
-  h+=tonightCard(curDay);
-  if(curDay!=="d09"){
-    h+=catCard(curDay,"vibe","Vibe of the day","Rank your top 3.",VIBES,dec.vibe);
-    h+=catCard(curDay,"dessert","Sweet tooth showdown","The North End cannoli debate — rank your top 3.",DESSERTS,dec.dessert);
+  let h=`<div class="dayhead"><h2>${d.d}</h2><p>${esc(d.label)}</p>`;
+  if(MODE==="admin"){
+    h+=`<div class="adminrow">
+      <button class="mini" id="btnVoterLink">Juan Diego's link for this day</button>
+      <button class="mini danger" id="btnClearDay">Clear this day</button></div>`;
   }
-  const votable=tonightKind(curDay)!=="locked"&&tonightKind(curDay)!=="none";
-  h+=`<button class="btn btn-blue" id="btnRes">${showResults?"Hide results":"See results"}</button><div id="resbox"></div>`;
+  h+=`</div>`;
+  if(MODE==="admin"&&loadedShared){h+=`<div class="notice"><b>Votes loaded from a shared link.</b> This is your admin view — you see both voters. Share the newest link to stay in sync.</div>`;loadedShared=false;}
+  catsFor(curDay).forEach(c=>{h+=catCard(curDay,c);});
+  if(MODE==="admin"){
+    h+=`<button class="btn btn-blue" id="btnRes">${showResults?"Hide results":"See results"}</button><div id="resbox"></div>`;
+  }
   $("main").innerHTML=h;
   document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>vote(curDay,b.dataset.cat,b.dataset.opt));
-  const cs=$("cuisineSel"); if(cs)cs.onchange=()=>{S.cuisine[curDay]=cs.value;syncHash();};
-  $("btnRes").onclick=()=>{showResults=!showResults;renderDay();if(showResults)renderResults();};
-  if(showResults)renderResults();
+  const cs=$("cuisineSel");if(cs)cs.onchange=()=>{S.cuisine[curDay]=cs.value;syncHash();};
+  if(MODE==="admin"){
+    $("btnRes").onclick=()=>{showResults=!showResults;renderDay();if(showResults)renderResults();};
+    $("btnVoterLink").onclick=openVoterLink;
+    $("btnClearDay").onclick=()=>{if(confirm("Clear all votes and decisions for "+d.d+"?")){clearDay(curDay);}};
+    if(showResults)renderResults();
+  }
 }
 function vote(dayId,cat,optId){
+  const max=CATMAX[cat];
   if(!S.votes[S.me][dayId])S.votes[S.me][dayId]={};
   const arr=S.votes[S.me][dayId][cat]||(S.votes[S.me][dayId][cat]=[]);
   const i=arr.indexOf(optId);
-  if(i>=0)arr.splice(i,1); else if(arr.length<3)arr.push(optId);
+  if(i>=0)arr.splice(i,1);else if(arr.length<max)arr.push(optId);
   syncHash();renderAll();
 }
 function scoreRows(dayId,cat,opts){
+  const max=CATMAX[cat],p=r=>r?(max+1-r):0;
   return opts.map(o=>{
     const r1=rankOf("diego",dayId,cat,o.id),r2=rankOf("juandiego",dayId,cat,o.id);
-    const p=r=>r?4-r:0;
     return {o,r1,r2,total:p(r1)+p(r2)};
   }).sort((a,b)=>b.total-a.total||(a.r1||9)-(b.r1||9));
 }
 function renderResults(){
   const box=$("resbox");if(!box)return;
-  const dec=S.decided[curDay]||{};
   const sections=[];
-  const push=(title,cat,opts)=>{
-    if(!opts||!opts.length)return;
-    const rows=scoreRows(curDay,cat,opts);
-    if(!rows.some(r=>r.total>0)){sections.push(`<div class="card"><h3>${title}</h3><p class="sub">No votes yet.</p></div>`);return;}
-    const w=rows[0];
-    const match=w.r1===1&&w.r2===1, agree=!match&&w.r1>0&&w.r2>0;
-    let h=`<div class="card"><h3>${title}</h3>
+  catsFor(curDay).forEach(cat=>{
+    const opts=catOpts(curDay,cat),rows=scoreRows(curDay,cat,opts);
+    if(!rows.some(r=>r.total>0)){sections.push(`<div class="card"><h3>${CATTITLES[cat]}</h3><p class="sub">No votes yet.</p></div>`);return;}
+    const w=rows[0],match=w.r1===1&&w.r2===1,agree=!match&&w.r1>0&&w.r2>0;
+    let h=`<div class="card"><h3>${CATTITLES[cat]}</h3>
       <p class="winnerline">Winner: <b>${esc(w.o.n)}</b> (${w.total} pts)
       ${match?'<span class="badge match">Perfect match</span>':agree?'<span class="badge agree">You agreed</span>':''}</p>
       <table class="res"><tr><th>Option</th><th>Diego</th><th>Juan Diego</th><th>Pts</th></tr>`;
-    rows.forEach((r,i)=>{h+=`<tr class="${i===0?"win":""}"><td>${esc(r.o.n)}</td><td>${r.r1?"#"+r.r1:"—"}</td><td>${r.r2?"#"+r.r2:"—"}</td><td>${r.total}</td></tr>`;});
-    h+=`</table></div>`;
-    sections.push(h);
-  };
-  push("Places to visit","places",placesFor(curDay));
-  push("Food","food",FOODS);
-  const tk=tonightKind(curDay);
-  if(tk==="nightopts")push("Tonight","tonight",nightOpts(curDay));
-  else if(tk==="clubs"||tk==="locked_after")push("Tonight","tonight",clubOpts());
-  if(curDay!=="d09"){push("Vibe of the day","vibe",VIBES);push("Sweet tooth showdown","dessert",DESSERTS);}
+    rows.forEach((r,i)=>{h+=`<tr class="${i===0?"win":""}"><td>${esc(r.o.n)}${r.o.u?` <a href="${esc(r.o.u)}" target="_blank" rel="noopener">link</a>`:""}</td><td>${r.r1?"#"+r.r1:"—"}</td><td>${r.r2?"#"+r.r2:"—"}</td><td>${r.total}</td></tr>`;});
+    sections.push(h+`</table></div>`);
+  });
   const anyWin=sections.some(s=>s.indexOf("Winner:")>=0);
-  box.innerHTML=sections.join("")+(anyWin&&!dec.places?`<button class="btn btn-gold" id="btnLock">Lock in this day's winners</button>`:"");
-  const bl=$("btnLock"); if(bl)bl.onclick=lockDay;
+  const dec=S.decided[curDay]||{};
+  box.innerHTML=sections.join("")+(anyWin&&!Object.keys(dec).length?`<button class="btn btn-gold" id="btnLock">Lock in this day's winners</button>`:"");
+  const bl=$("btnLock");if(bl)bl.onclick=lockDay;
 }
 function lockDay(){
-  const cats={places:placesFor(curDay),food:FOODS,vibe:VIBES,dessert:DESSERTS};
-  const tk=tonightKind(curDay);
-  if(tk==="nightopts")cats.tonight=nightOpts(curDay);
-  else if(tk==="clubs"||tk==="locked_after")cats.tonight=clubOpts();
   if(!S.decided[curDay])S.decided[curDay]={};
-  Object.keys(cats).forEach(cat=>{
-    const rows=scoreRows(curDay,cat,cats[cat]);
+  catsFor(curDay).forEach(cat=>{
+    const rows=scoreRows(curDay,cat,catOpts(curDay,cat));
     if(rows.length&&rows[0].total>0)S.decided[curDay][cat]=rows[0].o.id;
   });
   showResults=false;syncHash();renderAll();
 }
-function renderAll(){renderIdentity();renderChips();renderDay();}
-/* ================= SHARE / MODALS ================= */
+function clearDay(dayId){
+  delete S.votes.diego[dayId];delete S.votes.juandiego[dayId];
+  delete S.cuisine[dayId];delete S.decided[dayId];
+  showResults=false;syncHash();renderAll();
+}
+function resetAll(){
+  S=blankState();if(MODE==="voter")S.me="juandiego";
+  try{localStorage.removeItem("btv2");}catch(e){}
+  showResults=false;syncHash();renderAll();
+}
+function renderAll(){renderTop();if(MODE==="admin")renderChips();renderDay();renderSharebar();}
+/* ================= SHARE ================= */
 function openSheet(html){$("sheet").innerHTML=html;$("modal").classList.add("open");}
 function closeSheet(){$("modal").classList.remove("open");}
-function shareURL(){syncHash();return location.href;}
-function openShare(){
-  const url=shareURL();
-  openSheet(`<h3>Share our votes</h3>
-  <p>Votes travel inside this link. Send it to Juan Diego — he opens it, sees your rankings, adds his, and taps See results. Always share the <b>newest</b> link so you stay in sync.</p>
-  <div class="linkbox">${esc(url)}</div>
-  <button class="btn btn-gold" id="btnCopy">Copy link</button>
-  <a class="btn btn-blue" style="text-decoration:none;text-align:center;display:block" id="btnWA" href="https://wa.me/?text=${encodeURIComponent("Vote on our Boston trip days: "+url)}" target="_blank" rel="noopener">Send via WhatsApp</a>
-  <button class="btn btn-ghost" onclick="closeSheet()">Close</button>`);
-  $("btnCopy").onclick=()=>{
-    const done=()=>{$("btnCopy").textContent="Copied!";};
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done).catch(()=>fallbackCopy(url,done));}
-    else fallbackCopy(url,done);
-  };
+window.closeSheet=closeSheet;
+function baseURL(){return location.href.split("#")[0];}
+function adminLink(){return baseURL()+"#s="+enc(S);}
+function voterLink(dayId){return baseURL()+"#s="+enc(S)+"&mode=voter&day="+dayId;}
+function copyText(t,btn){
+  const done=()=>{btn.textContent="Copied!";};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done));
+  else fallbackCopy(t,done);
 }
 function fallbackCopy(t,done){const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}document.body.removeChild(ta);}
+function linkSheet(title,desc,url,waText){
+  openSheet(`<h3>${title}</h3><p>${desc}</p><div class="linkbox">${esc(url)}</div>
+  <button class="btn btn-gold" id="btnCopy">Copy link</button>
+  <a class="btn btn-blue" style="text-decoration:none;text-align:center;display:block" href="https://wa.me/?text=${encodeURIComponent(waText+" "+url)}" target="_blank" rel="noopener">Send via WhatsApp</a>
+  <button class="btn btn-ghost" onclick="closeSheet()">Close</button>`);
+  $("btnCopy").onclick=e=>copyText(url,e.target);
+}
+function openShare(){
+  syncHash();
+  linkSheet("Share our votes",
+    "Your admin link — you see everything. Votes travel inside the link; always share the <b>newest</b> one.",
+    adminLink(),"Our Boston trip votes (admin):");
+}
+function openVoterLink(){
+  syncHash();
+  const d=DAYS.find(x=>x.id===curDay);
+  linkSheet("Juan Diego's link — "+d.d,
+    "He sees <b>only this day</b>, votes as himself, and never sees your picks or the results. He taps <b>Send my votes to Diego</b> and you open his link back here.",
+    voterLink(curDay),"Vote for "+d.d+" of our Boston trip:");
+}
+function openSendBack(){
+  syncHash();
+  linkSheet("Send my votes to Diego",
+    "This link carries your votes for <b>"+esc(DAYS.find(x=>x.id===VDAY).d)+"</b>. Send it to Diego — he'll open it and see both sets of votes.",
+    adminLink(),"My votes for our Boston trip:");
+}
 function openHow(){
+  const admin=MODE==="admin";
   openSheet(`<h3>How this works</h3>
   <div class="howto" style="border:none;padding:0;margin:0"><ol>
-  <li>Tap <b>Voting as</b> up top and pick your name.</li>
-  <li>Open a day and <b>rank your top 3</b> in each category — tap in order 1, 2, 3.</li>
-  <li>Tap <b>Share our votes</b> and send the link to the other person.</li>
-  <li>They open it, add their rankings, and tap <b>See results</b> — most points wins.</li>
-  <li>Happy with it? Tap <b>Lock in this day's winners</b>. Picked places leave the pool for later days.</li>
+  ${admin?`<li>Tap <b>Voting as</b> up top and pick your name.</li>
+  <li>Open a day and rank your <b>top picks</b> in each category — tap in order.</li>
+  <li>Tap <b>Juan Diego's link for this day</b> and send it to him — he only sees that day and only his own ballot.</li>
+  <li>He taps <b>Send my votes to Diego</b>; you open his link and tap <b>See results</b> — most points wins.</li>
+  <li>Happy? <b>Lock in this day's winners.</b> Picked places leave the pool for later days.</li>`
+  :`<li>Rank your <b>top picks</b> in each category — tap in order 1, 2, 3.</li>
+  <li>Tap <b>Send my votes to Diego</b> and send him the link.</li>
+  <li>He'll show you the winners.</li>`}
   </ol>
-  <p>Scoring: 1st = 3 pts, 2nd = 2 pts, 3rd = 1 pt per person. A <b>Perfect match</b> means you both ranked it #1.</p></div>
+  <p>Scoring: 1st = top points, then descending, per person. A <b>Perfect match</b> means you both ranked it #1.</p></div>
+  ${admin?`<button class="btn btn-danger" id="btnResetAll">Reset everything (all days, all votes)</button>`:""}
   <button class="btn btn-ghost" onclick="closeSheet()">Close</button>`);
+  if(admin)$("btnResetAll").onclick=()=>{if(confirm("Reset EVERYTHING? All votes and locked days will be cleared.")){resetAll();closeSheet();}};
 }
-window.closeSheet=closeSheet;
+function renderSharebar(){
+  const r=$("shareRow");
+  if(MODE==="voter"){
+    r.innerHTML=`<button class="btn btn-ghost" id="btnHow" style="flex:0 0 44px;">?</button>
+    <button class="btn btn-gold" id="btnSendBack">Send my votes to Diego</button>`;
+    $("btnSendBack").onclick=openSendBack;
+  }else{
+    r.innerHTML=`<button class="btn btn-ghost" id="btnHow" style="flex:0 0 44px;">?</button>
+    <button class="btn btn-gold" id="btnShare">Share our votes</button>`;
+    $("btnShare").onclick=openShare;
+  }
+  $("btnHow").onclick=openHow;
+}
 /* ================= INIT ================= */
-$("btnDiego").onclick=()=>{S.me="diego";syncHash();renderAll();};
-$("btnJD").onclick=()=>{S.me="juandiego";syncHash();renderAll();};
-$("btnShare").onclick=openShare;
-$("btnHow").onclick=openHow;
 $("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeSheet();});
 loadState();
 renderAll();
