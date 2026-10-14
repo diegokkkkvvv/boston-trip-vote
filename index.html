@@ -321,6 +321,12 @@ const CLUBS=[
  {id:"bars",n:"Bar night instead",b:"Cocktail bars, no cover",u:""},
  {id:"rest",n:"Rest night",b:"Recharge for tomorrow",u:""}
 ];
+const CHILL=[
+ {id:"chill-movie",n:"Stay in and watch a movie",b:"Cozy night, you pick the film",u:""},
+ {id:"chill-drinks",n:"Get drunk, just the two of us",b:"A bottle of something, no agenda",u:""},
+ {id:"chill-walk",n:"Late-night neighborhood walk",b:"Cambridge after dark",u:""},
+ {id:"chill-games",n:"Video game night",b:"Couch co-op mode",u:""}
+];
 const LATIN_LINKS=[
  {n:"Eventbrite: Latin parties in Boston",u:"https://www.eventbrite.com/d/ma--boston/latin-party/"},
  {n:"Dice: Boston events",u:"https://dice.fm/"}
@@ -372,6 +378,7 @@ function placesFor(dayId){const g=decidedBefore(dayId);return PLACES.filter(p=>!
 function tonightOpts(dayId){
   let list=(TONIGHT[dayId]||[]).slice();
   if(CLUB_NIGHTS.indexOf(dayId)>=0)list=list.concat(CLUBS);
+  if(list.length)list=list.concat(CHILL);
   return list;
 }
 function dessertFor(dayId){return DESSERT_DAYS.indexOf(dayId)>=0?DESSERTS:[];}
